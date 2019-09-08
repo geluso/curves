@@ -1,7 +1,10 @@
+const DEFAULT_POINT_COLOR = 'red'
+
 export default class Point {
   constructor(xx=0, yy=0) {
     this.xx = xx
     this.yy = yy
+    this.color = DEFAULT_POINT_COLOR
   }
 
   static lerp(p1, p2, percent) {
