@@ -1,7 +1,9 @@
 import Point from './point.js'
 import Line from './Line.js'
+import State from './State.js'
 
 import Util from './util.js'
+
 import {
   WIDTH, HEIGHT, NUM_INITIAL_LINES,
   LINE_THICKNESS, POINT_SIZE, HALF_POINT_SIZE,
@@ -11,16 +13,15 @@ import {
 let CTX
 let SELECTED = null
 
-let LINES = []
-let LAST_LINE = null
-let IS_RANDOM_COLORS = false
-let IS_DRAWING_MIDPOINTS = false
+let STATE = new State(draw)
 
 main()
 
 window.requestAnimationFrame(jiggleLoop)
 function jiggleLoop() {
-  jiggle()
+  if (STATE.isJiggling) {
+    jiggle()
+  }
   window.requestAnimationFrame(jiggleLoop)
 }
 
@@ -28,54 +29,25 @@ document.addEventListener('mousedown', wrapCoordinates(mousedown))
 document.addEventListener('mousemove', wrapCoordinates(mousemove))
 document.addEventListener('mouseup', wrapCoordinates(mouseup))
 
-let resetButton = document.getElementById('reset')
-resetButton.addEventListener('click', reset)
-
-let newLineButton = document.getElementById('new-line')
-newLineButton.addEventListener('click', newLine)
-
-let clearButton = document.getElementById('clear')
-clearButton.addEventListener('click', clearAll)
-
-let oneColorButton = document.getElementById('all-one-color')
-oneColorButton.addEventListener('click', allOneColor)
-
-let toggleRandomColorsButton = document.getElementById('toggle-random-colors')
-let toggleRandomColorsValue = document.getElementById('toggle-random-colors-value')
-toggleRandomColorsButton.addEventListener('click', toggleRandomColors)
-
-let toggleMidpointsButton = document.getElementById('toggle-drawing-midpoints')
-let toggleMidpointsValue = document.getElementById('toggle-drawing-midpoints-value')
-toggleMidpointsButton.addEventListener('click', toggleMidpoints)
-
 function main() {
   let canvas = document.getElementById('screen')  
   canvas.width = WIDTH
   canvas.height = HEIGHT
   
   CTX = canvas.getContext('2d')
-  reset()
-}
-
-function reset() {
-  LINES = []
-  for (let i = 0; i < NUM_INITIAL_LINES; i++) {
-    newLine()
-  }
-
-  draw()
+  STATE.controls.reset()
 }
 
 function draw() {
   CTX.clearRect(0, 0, WIDTH, HEIGHT)
-  LINES.forEach(drawLine)
+  STATE.lines.forEach(drawLine)
 }
 
 function drawLine(line) {
   drawPoint(line.start)
   drawPoint(line.end)
 
-  if (IS_DRAWING_MIDPOINTS) {
+  if (STATE.isDrawingMidpoints) {
     drawPoint(line.mid)
   }
 
@@ -90,7 +62,7 @@ function drawPoint(pp) {
 }
 
 function lerp(line) {
-  if (IS_RANDOM_COLORS) {
+  if (STATE.isRandomColors) {
     line.color = Util.randomRGB()
   }
   CTX.fillStyle = line.color
@@ -108,7 +80,7 @@ function lerp(line) {
 }
 
 function getAllPoints() {
-  let points = LINES.reduce((accum, line) => {
+  let points = STATE.lines.reduce((accum, line) => {
     return accum.concat(line.start, line.mid, line.end)
   }, [])
   return points
@@ -154,42 +126,6 @@ function mouseup(xx, yy) {
   SELECTED = null
 }
 
-function allOneColor() {
-  let color = Util.randomRGB()
-  LINES.forEach(line => {
-    line.color = color
-  })
-  draw()
-  return true
-}
-
-function toggleRandomColors() {
-  IS_RANDOM_COLORS = !IS_RANDOM_COLORS
-  toggleRandomColorsValue.textContent = IS_RANDOM_COLORS
-  return true
-}
-
-function toggleMidpoints() {
-  IS_DRAWING_MIDPOINTS = !IS_DRAWING_MIDPOINTS
-  toggleMidpointsValue.textContent = IS_DRAWING_MIDPOINTS
-  draw()
-  return true
-}
-
-function newLine() {
-  let line = Line.randomLine()
-  if (LAST_LINE) {
-    line.start = LAST_LINE.end
-    line.points[0] = LAST_LINE.end
-  }
-  LAST_LINE = line
-
-  LINES.push(line)
-  draw()
-
-  return true
-}
-
 function jiggle() {
   getAllPoints().forEach(pp => {
     let degree = Math.random() * 360
@@ -209,7 +145,3 @@ function jiggle() {
   draw()
 }
 
-function clearAll() {
-  LINES = []
-  draw()
-}
