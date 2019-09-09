@@ -1,4 +1,6 @@
 import Line from './Line.js'
+import Util from './Util.js'
+
 import {
   WIDTH, HEIGHT, NUM_INITIAL_LINES,
   LINE_THICKNESS, POINT_SIZE, HALF_POINT_SIZE,
@@ -10,29 +12,29 @@ export default class Control {
     this.state = state
 
     this.resetButton = document.getElementById('reset')
-    this.resetButton.addEventListener('click', this.reset)
+    this.resetButton.addEventListener('click', () => this.reset())
 
     this.newLineButton = document.getElementById('new-line')
-    this.newLineButton.addEventListener('click', this.newLine)
+    this.newLineButton.addEventListener('click', () => this.newLine())
 
     this.clearButton = document.getElementById('clear')
-    this.clearButton.addEventListener('click', this.clearAll)
+    this.clearButton.addEventListener('click', () => this.clearAll())
 
     this.oneColorButton = document.getElementById('all-one-color')
-    this.oneColorButton.addEventListener('click', this.allOneColor)
+    this.oneColorButton.addEventListener('click', () => this.allOneColor())
 
     this.toggleJigglingButton = document.getElementById('toggle-jiggling')
     this.toggleJigglingValue = document.getElementById('toggle-jiggling-value')
-    this.toggleJigglingButton.addEventListener('click', this.toggleJiggling)
+    this.toggleJigglingButton.addEventListener('click', () => this.toggleJiggling())
 
 
     this.toggleRandomColorsButton = document.getElementById('toggle-random-colors')
     this.toggleRandomColorsValue = document.getElementById('toggle-random-colors-value')
-    this.toggleRandomColorsButton.addEventListener('click', this.toggleRandomColors)
+    this.toggleRandomColorsButton.addEventListener('click', () => this.toggleRandomColors())
 
     this.toggleMidpointsButton = document.getElementById('toggle-drawing-midpoints')
     this.toggleMidpointsValue = document.getElementById('toggle-drawing-midpoints-value')
-    this.toggleMidpointsButton.addEventListener('click', this.toggleMidpoints)
+    this.toggleMidpointsButton.addEventListener('click', () => this.toggleMidpoints())
   }
 
   reset() {
@@ -83,6 +85,7 @@ export default class Control {
   toggleRandomColors() {
     this.state.isRandomColors = !this.state.isRandomColors
     this.toggleRandomColorsValue.textContent = this.state.isRandomColors
+    this.state.draw()
     return true
   }
 
