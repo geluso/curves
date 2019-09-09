@@ -1,7 +1,11 @@
 import Point from '../point.js'
+import Util from '../util.js'
 import PointDrawer from './point-drawer.js'
 
-import { WIDTH, HEIGHT, LINE_THICKNESS } from '../config.js'
+import {
+  WIDTH, HEIGHT, LINE_THICKNESS,
+  CONTROL_LINE_COLOR
+} from '../config.js'
 
 export default class LineDrawer {
   static draw(ctx, state, line) {
@@ -11,6 +15,10 @@ export default class LineDrawer {
     if (state.isDrawingMidpoints) {
       PointDrawer.draw(ctx, line.control1)
       PointDrawer.draw(ctx, line.control2)
+
+      ctx.strokeStyle = CONTROL_LINE_COLOR
+      Util.line(ctx, line.control1, line.start)
+      Util.line(ctx, line.control2, line.end)
     }
 
     LineDrawer.lerp(ctx, state, line)

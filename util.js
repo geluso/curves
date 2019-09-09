@@ -8,5 +8,13 @@ export default {
 
   clamp: (min, val, max) => {
     return Math.min(Math.max(val, min), max)
+  },
+
+  line: (ctx, p1, p2) => {
+    ctx.beginPath()
+    ctx.moveTo(p1.xx, p1.yy)
+    ctx.lineTo(p2.xx, p2.yy)
+    ctx.stroke()
   }
 }
+
