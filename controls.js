@@ -1,10 +1,13 @@
+import Point from './Point.js'
 import Line from './Line.js'
 import Util from './Util.js'
 
 import {
   WIDTH, HEIGHT, NUM_INITIAL_LINES,
   LINE_THICKNESS, POINT_SIZE, HALF_POINT_SIZE,
-  JIGGLE_FACTOR
+  JIGGLE_FACTOR,
+  USE_PRECONFIGURED_LINES,
+  PRECONFIGURED_LINES
 } from './config.js'
 
 export default class Control {
@@ -39,8 +42,14 @@ export default class Control {
 
   reset() {
     this.state.lines = []
-    for (let i = 0; i < NUM_INITIAL_LINES; i++) {
-      this.newLine()
+    if (USE_PRECONFIGURED_LINES) {
+      PRECONFIGURED_LINES.forEach(line => {
+        this.state.lines.push(line)
+      })
+    } else {
+      for (let i = 0; i < NUM_INITIAL_LINES; i++) {
+        this.newLine()
+      }
     }
 
     this.state.draw()
