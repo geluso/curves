@@ -2,6 +2,8 @@ import Point from './point.js'
 import Line from './Line.js'
 import State from './State.js'
 
+import LineDrawer from './drawers/line-drawer.js'
+
 import Util from './util.js'
 
 import {
@@ -40,43 +42,9 @@ function main() {
 
 function draw() {
   CTX.clearRect(0, 0, WIDTH, HEIGHT)
-  STATE.lines.forEach(drawLine)
-}
-
-function drawLine(line) {
-  drawPoint(line.start)
-  drawPoint(line.end)
-
-  if (STATE.isDrawingMidpoints) {
-    drawPoint(line.mid)
-  }
-
-  lerp(line)
-}
-
-function drawPoint(pp) {
-  CTX.fillStyle = pp.color
-  let xx = pp.xx - HALF_POINT_SIZE
-  let yy = pp.yy - HALF_POINT_SIZE
-  CTX.fillRect(xx, yy, POINT_SIZE, POINT_SIZE)
-}
-
-function lerp(line) {
-  if (STATE.isRandomColors) {
-    line.color = Util.randomRGB()
-  }
-  CTX.fillStyle = line.color
-
-  // take a step pixel by pixel
-  let resolution = Math.max(WIDTH, HEIGHT);
-  for (let i = 0; i < resolution; i++) {
-    let percent = i / resolution
-
-    let mid1 = Point.lerp(line.start, line.mid, percent)
-    let mid2 = Point.lerp(line.mid, line.end, percent)
-    let mid3 = Point.lerp(mid1, mid2, percent)
-    CTX.fillRect(mid3.xx, mid3.yy, LINE_THICKNESS, LINE_THICKNESS)
-  }
+  STATE.lines.forEach(line => {
+    LineDrawer.draw(CTX, STATE, line)
+  })
 }
 
 function getAllPoints() {

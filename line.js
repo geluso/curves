@@ -2,6 +2,7 @@ import {
   WIDTH, HEIGHT, RANDOM_LINE_SPREAD,
   BORDER_PADDING
 }  from './config.js'
+
 import Point from './point.js'
 import Util from './util.js'
 
