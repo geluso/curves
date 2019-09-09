@@ -9,7 +9,8 @@ export default class LineDrawer {
     PointDrawer.draw(ctx, line.end)
 
     if (state.isDrawingMidpoints) {
-      PointDrawer.draw(ctx, line.mid)
+      PointDrawer.draw(ctx, line.control1)
+      PointDrawer.draw(ctx, line.control2)
     }
 
     LineDrawer.lerp(ctx, state, line)
@@ -26,10 +27,16 @@ export default class LineDrawer {
     for (let i = 0; i < resolution; i++) {
       let percent = i / resolution
 
-      let mid1 = Point.lerp(line.start, line.mid, percent)
-      let mid2 = Point.lerp(line.mid, line.end, percent)
-      let mid3 = Point.lerp(mid1, mid2, percent)
-      ctx.fillRect(mid3.xx, mid3.yy, LINE_THICKNESS, LINE_THICKNESS)
+      let startToControl = Point.lerp(line.start, line.control1, percent)
+      let controlToControl = Point.lerp(line.control1, line.control2, percent)
+      let controlToEnd = Point.lerp(line.control2, line.end, percent)
+
+      let curve1 = Point.lerp(startToControl, controlToControl, percent)
+      let curve2 = Point.lerp(controlToControl, controlToEnd, percent)
+
+      let finalPoint = Point.lerp(curve1, curve2, percent)
+
+      ctx.fillRect(finalPoint.xx, finalPoint.yy, LINE_THICKNESS, LINE_THICKNESS)
     }
   }
 }

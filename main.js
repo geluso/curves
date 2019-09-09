@@ -49,7 +49,7 @@ function draw() {
 
 function getAllPoints() {
   let points = STATE.lines.reduce((accum, line) => {
-    return accum.concat(line.start, line.mid, line.end)
+    return accum.concat(line.points)
   }, [])
   return points
 }
