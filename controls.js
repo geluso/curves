@@ -49,6 +49,7 @@ export default class Control {
     if (USE_PRECONFIGURED_LINES) {
       PRECONFIGURED_LINES.forEach(line => {
         this.state.lines.push(line)
+        this.state.lastLine = line
       })
 
       Line.alignControlPoints(this.state.lines[0], this.state.lines[1])
@@ -67,6 +68,8 @@ export default class Control {
     if (this.state.lastLine) {
       line.start = this.state.lastLine.end
       line.points[0] = this.state.lastLine.end
+
+      Line.alignControlPoints(this.state.lastLine, line)
     }
     this.state.lastLine = line
 
