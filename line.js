@@ -1,4 +1,7 @@
-import {WIDTH, HEIGHT, RANDOM_LINE_SPREAD}  from './config.js'
+import {
+  WIDTH, HEIGHT, RANDOM_LINE_SPREAD,
+  BORDER_PADDING
+}  from './config.js'
 import Point from './point.js'
 import Util from './util.js'
 
@@ -14,8 +17,10 @@ export default class Line {
   }
 
   static randomLine() {
-    let centerX = RANDOM_LINE_SPREAD + (WIDTH - RANDOM_LINE_SPREAD) * Math.random()
-    let centerY = RANDOM_LINE_SPREAD + (HEIGHT - RANDOM_LINE_SPREAD) * Math.random()
+    let centerX = (WIDTH - RANDOM_LINE_SPREAD) * Math.random()
+    let centerY = (HEIGHT - RANDOM_LINE_SPREAD) * Math.random()
+    centerX = Util.clamp(BORDER_PADDING, centerX, WIDTH - BORDER_PADDING)
+    centerY = Util.clamp(BORDER_PADDING, centerY, HEIGHT - BORDER_PADDING)
 
     // choose random whether the offset will be positive or negative
     let negs = [
