@@ -39,6 +39,9 @@ export default class Control {
     this.toggleRandomColorsValue = document.getElementById('toggle-random-colors-value')
     this.toggleRandomColorsButton.addEventListener('click', () => this.toggleRandomColors())
 
+    this.toggleDrawEvenlySpacedButton = document.getElementById('toggle-draw-evenly-spaced')
+    this.toggleDrawEvenlySpacedButton.addEventListener('click', () => this.toggleDrawingEvenlySpaced())
+
     this.toggleMidpointsButton = document.getElementById('toggle-drawing-midpoints')
     this.toggleMidpointsValue = document.getElementById('toggle-drawing-midpoints-value')
     this.toggleMidpointsButton.addEventListener('click', () => this.toggleMidpoints())
@@ -103,6 +106,12 @@ export default class Control {
   toggleRandomColors() {
     this.state.isRandomColors = !this.state.isRandomColors
     this.toggleRandomColorsValue.textContent = this.state.isRandomColors
+    this.state.draw()
+    return true
+  }
+
+  toggleDrawingEvenlySpaced() {
+    this.state.isDrawingEvenlySpaced = !this.state.isDrawingEvenlySpaced
     this.state.draw()
     return true
   }

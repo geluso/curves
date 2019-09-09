@@ -52,13 +52,15 @@ export default class LineDrawer {
       ctx.fillStyle = line.color
       ctx.fillRect(finalPoint.xx, finalPoint.yy, LINE_THICKNESS, LINE_THICKNESS)
 
-      distanceFromLastPoint += finalPoint.distanceTo(lastPoint)
-      lastPoint = finalPoint
+      if (state.isDrawingEvenlySpaced) {
+        distanceFromLastPoint += finalPoint.distanceTo(lastPoint)
+        lastPoint = finalPoint
 
-      if (distanceFromLastPoint > LINE_SPACING_THRESHOLD) {
-        ctx.fillStyle = 'white'
-        ctx.fillRect(finalPoint.xx, finalPoint.yy, LINE_SPACING_THICKNESS, LINE_SPACING_THICKNESS)
-        distanceFromLastPoint = 0
+        if (distanceFromLastPoint > LINE_SPACING_THRESHOLD) {
+          ctx.fillStyle = 'white'
+          ctx.fillRect(finalPoint.xx, finalPoint.yy, LINE_SPACING_THICKNESS, LINE_SPACING_THICKNESS)
+          distanceFromLastPoint = 0
+        }
       }
     }
   }

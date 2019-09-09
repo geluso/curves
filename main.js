@@ -75,7 +75,6 @@ function wrapCoordinates(func) {
     let yy = ev.offsetY
     func(xx, yy)
   }
-    
 }
 
 function mousedown(xx, yy) {
@@ -86,6 +85,13 @@ function mousemove(xx, yy) {
   if (SELECTED) {
     SELECTED.xx = xx
     SELECTED.yy = yy
+
+    for (let i = 1; i < STATE.lines.length; i++) {
+      let line1 = STATE.lines[i - 1]
+      let line2 = STATE.lines[i]
+      Line.alignControlPoints(line1, line2)
+    }
+
     draw()
   }
 }
