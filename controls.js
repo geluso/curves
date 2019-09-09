@@ -20,6 +20,9 @@ export default class Control {
     this.newLineButton = document.getElementById('new-line')
     this.newLineButton.addEventListener('click', () => this.newLine())
 
+    this.closeButton = document.getElementById('close')
+    this.closeButton.addEventListener('click', () => this.close())
+
     this.clearButton = document.getElementById('clear')
     this.clearButton.addEventListener('click', () => this.clearAll())
 
@@ -62,6 +65,16 @@ export default class Control {
       }
     }
 
+    this.state.draw()
+    return true
+  }
+
+  close() {
+    let line = Line.randomLine()
+    line.start = this.state.lastLine.end
+    line.end = this.state.lines[0].start
+
+    this.state.lines.push(line)
     this.state.draw()
     return true
   }

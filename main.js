@@ -92,6 +92,12 @@ function mousemove(xx, yy) {
       Line.alignControlPoints(line1, line2)
     }
 
+    let firstLine = this.state.lines[0]
+    let lastLine = this.state.lines[this.state.lines.length - 1]
+    if (lastLine.end === firstLine.start) {
+      Line.alignControlPoints(lastLine, firstLine)
+    }
+
     draw()
   }
 }
@@ -102,12 +108,12 @@ function mouseup(xx, yy) {
 
 function jiggle() {
   getAllPoints().forEach(pp => {
-    let degree = Math.random() * 360
-    let xx = JIGGLE_FACTOR * Math.cos(degree)
-    let yy = JIGGLE_FACTOR * Math.sin(degree)
+    pp.xx += pp.dxx
+    pp.yy += pp.dyy
 
-    pp.xx += xx
-    pp.yy += yy
+    if (pp.xx < 0 || pp.yy < 0 || pp.xx > WIDTH || pp.yy > HEIGHT) {
+      pp.chooseRandomDirection()
+    }
 
     pp.xx = Math.max(pp.xx, 0)
     pp.xx = Math.min(pp.xx, WIDTH)
@@ -115,6 +121,12 @@ function jiggle() {
     pp.yy = Math.max(pp.yy, 0)
     pp.yy = Math.min(pp.yy, HEIGHT)
   })
+
+  for (let i = 1; i < STATE.lines.length; i++) {
+    let line1 = STATE.lines[i - 1]
+    let line2 = STATE.lines[i]
+    Line.alignControlPoints(line1, line2)
+  }
 
   draw()
 }

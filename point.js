@@ -5,6 +5,15 @@ export default class Point {
     this.xx = xx
     this.yy = yy
     this.color = DEFAULT_POINT_COLOR
+
+    this.chooseRandomDirection()
+  }
+
+  chooseRandomDirection() {
+    let JIGGLE_FACTOR = 1
+    this.direction = Math.random() * 360
+    this.dxx = JIGGLE_FACTOR * Math.cos(this.direction)
+    this.dyy = JIGGLE_FACTOR * Math.sin(this.direction)
   }
 
   static lerp(p1, p2, percent) {
