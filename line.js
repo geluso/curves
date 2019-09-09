@@ -53,4 +53,15 @@ export default class Line {
       new Point(endX, endY)
     )
   }
+
+  static alignControlPoints(first, second) {
+    let c1 = first.control2
+    let c2 = second.control1
+
+    let dx = first.end.xx - first.control2.xx
+    let dy = first.end.yy - first.control2.yy
+
+    second.control1.xx = second.start.xx + dx
+    second.control1.yy = second.start.yy + dy
+  }
 }

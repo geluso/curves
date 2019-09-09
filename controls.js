@@ -50,6 +50,8 @@ export default class Control {
       PRECONFIGURED_LINES.forEach(line => {
         this.state.lines.push(line)
       })
+
+      Line.alignControlPoints(this.state.lines[0], this.state.lines[1])
     } else {
       for (let i = 0; i < NUM_INITIAL_LINES; i++) {
         this.newLine()
