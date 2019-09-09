@@ -1,7 +1,7 @@
 export const WIDTH = window.innerWidth
 export const HEIGHT = window.innerHeight
 export const RANDOM_LINE_SPREAD = 100
-export const NUM_INITIAL_LINES = 100
+export const NUM_INITIAL_LINES = 20
 
 export const LINE_THICKNESS = 3
 export const POINT_SIZE = 6

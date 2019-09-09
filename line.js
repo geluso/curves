@@ -15,7 +15,7 @@ export default class Line {
 
   static randomLine() {
     let centerX = RANDOM_LINE_SPREAD + (WIDTH - RANDOM_LINE_SPREAD) * Math.random()
-    let centerY = RANDOM_LINE_SPREAD + (WIDTH - RANDOM_LINE_SPREAD) * Math.random()
+    let centerY = RANDOM_LINE_SPREAD + (HEIGHT - RANDOM_LINE_SPREAD) * Math.random()
 
     // choose random whether the offset will be positive or negative
     let negs = [

@@ -8,17 +8,13 @@ import {
   JIGGLE_FACTOR
 } from './config.js'
 
-
-let LINES = []
-for (let i = 0; i < NUM_INITIAL_LINES; i++) {
-  LINES.push(Line.randomLine())
-}
-
-let IS_RANDOM_COLORS = false
-let IS_DRAWING_MIDPOINTS = false
-
 let CTX
 let SELECTED = null
+
+let LINES = []
+let LAST_LINE = null
+let IS_RANDOM_COLORS = false
+let IS_DRAWING_MIDPOINTS = false
 
 main()
 
@@ -32,6 +28,18 @@ document.addEventListener('mousedown', wrapCoordinates(mousedown))
 document.addEventListener('mousemove', wrapCoordinates(mousemove))
 document.addEventListener('mouseup', wrapCoordinates(mouseup))
 
+let resetButton = document.getElementById('reset')
+resetButton.addEventListener('click', reset)
+
+let newLineButton = document.getElementById('new-line')
+newLineButton.addEventListener('click', newLine)
+
+let clearButton = document.getElementById('clear')
+clearButton.addEventListener('click', clearAll)
+
+let oneColorButton = document.getElementById('all-one-color')
+oneColorButton.addEventListener('click', allOneColor)
+
 let toggleRandomColorsButton = document.getElementById('toggle-random-colors')
 let toggleRandomColorsValue = document.getElementById('toggle-random-colors-value')
 toggleRandomColorsButton.addEventListener('click', toggleRandomColors)
@@ -40,15 +48,20 @@ let toggleMidpointsButton = document.getElementById('toggle-drawing-midpoints')
 let toggleMidpointsValue = document.getElementById('toggle-drawing-midpoints-value')
 toggleMidpointsButton.addEventListener('click', toggleMidpoints)
 
-let newLineButton = document.getElementById('new-line')
-newLineButton.addEventListener('click', newLine)
-
 function main() {
   let canvas = document.getElementById('screen')  
   canvas.width = WIDTH
   canvas.height = HEIGHT
   
   CTX = canvas.getContext('2d')
+  reset()
+}
+
+function reset() {
+  LINES = []
+  for (let i = 0; i < NUM_INITIAL_LINES; i++) {
+    newLine()
+  }
 
   draw()
 }
@@ -141,6 +154,15 @@ function mouseup(xx, yy) {
   SELECTED = null
 }
 
+function allOneColor() {
+  let color = Util.randomRGB()
+  LINES.forEach(line => {
+    line.color = color
+  })
+  draw()
+  return true
+}
+
 function toggleRandomColors() {
   IS_RANDOM_COLORS = !IS_RANDOM_COLORS
   toggleRandomColorsValue.textContent = IS_RANDOM_COLORS
@@ -154,30 +176,40 @@ function toggleMidpoints() {
   return true
 }
 
-
 function newLine() {
-  LINES.push(Line.randomLine())
+  let line = Line.randomLine()
+  if (LAST_LINE) {
+    line.start = LAST_LINE.end
+    line.points[0] = LAST_LINE.end
+  }
+  LAST_LINE = line
+
+  LINES.push(line)
   draw()
+
+  return true
 }
 
 function jiggle() {
   getAllPoints().forEach(pp => {
-    if (Math.random() < .5) {
-      pp.xx += JIGGLE_FACTOR
-    } else {
-      pp.xx -= JIGGLE_FACTOR
-    }
+    let degree = Math.random() * 360
+    let xx = JIGGLE_FACTOR * Math.cos(degree)
+    let yy = JIGGLE_FACTOR * Math.sin(degree)
+
+    pp.xx += xx
+    pp.yy += yy
+
     pp.xx = Math.max(pp.xx, 0)
     pp.xx = Math.min(pp.xx, WIDTH)
 
-    if (Math.random() < .5) {
-      pp.yy += JIGGLE_FACTOR
-    } else {
-      pp.yy -= JIGGLE_FACTOR
-    }
     pp.yy = Math.max(pp.yy, 0)
     pp.yy = Math.min(pp.yy, HEIGHT)
   })
 
+  draw()
+}
+
+function clearAll() {
+  LINES = []
   draw()
 }
