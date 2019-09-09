@@ -23,6 +23,10 @@ export default class Control {
     this.clearButton = document.getElementById('clear')
     this.clearButton.addEventListener('click', () => this.clearAll())
 
+    this.alignButton = document.getElementById('align')
+    this.alignValue = document.getElementById('align-value')
+    this.alignButton.addEventListener('click', () => this.toggleAlign())
+
     this.oneColorButton = document.getElementById('all-one-color')
     this.oneColorButton.addEventListener('click', () => this.allOneColor())
 
@@ -103,6 +107,12 @@ export default class Control {
     this.toggleMidpointsValue.textContent = this.state.isDrawingMidpoints
 
     this.state.draw()
+    return true
+  }
+
+  toggleAlign() {
+    this.state.isControlPointsAligned = !this.state.isControlPointsAligned
+    this.alignValue.textContent = this.state.isControlPointsAligned
     return true
   }
 }
