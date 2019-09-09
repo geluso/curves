@@ -4,7 +4,9 @@ import PointDrawer from './point-drawer.js'
 
 import {
   WIDTH, HEIGHT, LINE_THICKNESS,
-  CONTROL_LINE_COLOR
+  CONTROL_LINE_COLOR,
+  LINE_SPACING_THRESHOLD,
+  LINE_SPACING_THICKNESS
 } from '../config.js'
 
 export default class LineDrawer {
@@ -30,6 +32,9 @@ export default class LineDrawer {
     }
     ctx.fillStyle = line.color
 
+    let distanceFromLastPoint = 0
+    let lastPoint = line.start
+
     // take a step pixel by pixel
     let resolution = Math.max(WIDTH, HEIGHT);
     for (let i = 0; i < resolution; i++) {
@@ -44,7 +49,17 @@ export default class LineDrawer {
 
       let finalPoint = Point.lerp(curve1, curve2, percent)
 
+      ctx.fillStyle = line.color
       ctx.fillRect(finalPoint.xx, finalPoint.yy, LINE_THICKNESS, LINE_THICKNESS)
+
+      distanceFromLastPoint += finalPoint.distanceTo(lastPoint)
+      lastPoint = finalPoint
+
+      if (distanceFromLastPoint > LINE_SPACING_THRESHOLD) {
+        ctx.fillStyle = 'white'
+        ctx.fillRect(finalPoint.xx, finalPoint.yy, LINE_SPACING_THICKNESS, LINE_SPACING_THICKNESS)
+        distanceFromLastPoint = 0
+      }
     }
   }
 }

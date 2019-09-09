@@ -36,6 +36,10 @@ export default class Point {
   lerpTo(p2, percent) {
     return Point.lerp(this, p2, percent)
   }
+  
+  distanceTo(other) {
+    return Point.distancePP(this, other)
+  }
 
   midTo(p2) {
     return this.lerpTo(this, p2, .5)

@@ -10,3 +10,5 @@ export const JIGGLE_FACTOR = 1
 
 export const BORDER_PADDING = 30
 export const CONTROL_LINE_COLOR = 'white'
+export const LINE_SPACING_THRESHOLD = 20
+export const LINE_SPACING_THICKNESS = 5
